@@ -1,1 +1,3 @@
--Dopenrc=disabled -Dlibpbpf_a=disabled -Dbpftool=disabled
+-Dopenrc=disabled 
+-Dlibbpf_a=disabled
+-Dbpftool=/usr/bin/bpftool
