@@ -1,0 +1,11 @@
+--- scx-1.0.6/services/systemd/scx.service~	2024-11-06 19:45:36.000000000 +0000
++++ scx-1.0.6/services/systemd/scx.service	2024-11-26 18:47:17.262319895 +0000
+@@ -6,7 +6,7 @@
+ 
+ [Service]
+ Type=simple
+-EnvironmentFile=/etc/default/scx
++#EnvironmentFile=/etc/default/scx
+ ExecStart=/bin/bash -c 'exec ${SCX_SCHEDULER_OVERRIDE:-$SCX_SCHEDULER} ${SCX_FLAGS_OVERRIDE:-$SCX_FLAGS} '
+ Restart=on-failure
+ StandardError=journal

@@ -7,7 +7,7 @@
 #
 Name     : scx
 Version  : 1.0.6
-Release  : 1
+Release  : 2
 URL      : https://github.com/sched-ext/scx/archive/refs/tags/v1.0.6.tar.gz
 Source0  : https://github.com/sched-ext/scx/archive/refs/tags/v1.0.6.tar.gz
 Source1  : http://localhost/cgit/vendor/scx/snapshot/scx-2024-11-25-21-58-24.tar.gz
@@ -31,6 +31,7 @@ BuildRequires : rustc
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
+Patch1: unit.patch
 
 %description
 # Sched_ext Schedulers and Tools
@@ -82,6 +83,7 @@ tar xf %{_sourcedir}/scx-2024-11-25-21-58-24.tar.gz
 cd %{_builddir}/scx-1.0.6
 mkdir -p ./vendor
 cp -r %{_builddir}/scx-2024-11-25-21-58-24/* %{_builddir}/scx-1.0.6/./vendor
+%patch -P 1 -p1
 mkdir -p .cargo
 echo '[source.crates-io]
 replace-with = "vendored-sources"
@@ -95,7 +97,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1732638003
+export SOURCE_DATE_EPOCH=1732647653
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
