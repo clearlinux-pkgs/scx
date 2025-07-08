@@ -6,14 +6,14 @@
 # autospec commit: 65cf152
 #
 Name     : scx
-Version  : 1.0.13
-Release  : 8
-URL      : https://github.com/sched-ext/scx/archive/v1.0.13/scx-1.0.13.tar.gz
-Source0  : https://github.com/sched-ext/scx/archive/v1.0.13/scx-1.0.13.tar.gz
-Source1  : http://localhost/cgit/vendor/scx/snapshot/scx-2025-06-12-23-09-40.tar.gz
+Version  : 1.0.14
+Release  : 9
+URL      : https://github.com/sched-ext/scx/archive/v1.0.14/scx-1.0.14.tar.gz
+Source0  : https://github.com/sched-ext/scx/archive/v1.0.14/scx-1.0.14.tar.gz
+Source1  : http://localhost/cgit/vendor/scx/snapshot/scx-2025-07-08-22-49-03.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
-License  : 0BSD Apache-2.0 BSD-2-Clause BSD-3-Clause BSL-1.0 CC0-1.0 GFDL-1.3 GPL-2.0 GPL-3.0 HPND ICU LGPL-2.1 LGPL-3.0 MIT MPL-2.0 MPL-2.0-no-copyleft-exception Unlicense Zlib
+License  : 0BSD Apache-2.0 BSD-2-Clause BSD-3-Clause BSL-1.0 CC0-1.0 GFDL-1.3 GPL-2.0 GPL-3.0 HPND ICU LGPL-2.1 LGPL-3.0 MIT MPL-2.0-no-copyleft-exception Unlicense Zlib
 Requires: scx-bin = %{version}-%{release}
 Requires: scx-data = %{version}-%{release}
 Requires: scx-license = %{version}-%{release}
@@ -36,10 +36,7 @@ Patch1: unit.patch
 
 %description
 # Sched_ext Schedulers and Tools
-[sched_ext](https://github.com/sched-ext/scx) is a Linux kernel feature
-which enables implementing kernel thread schedulers in BPF and dynamically
-loading them. This repository contains various scheduler implementations and
-support utilities.
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sched-ext/scx)
 
 %package bin
 Summary: bin components for the scx package.
@@ -90,12 +87,12 @@ services components for the scx package.
 
 
 %prep
-%setup -q -n scx-1.0.13
+%setup -q -n scx-1.0.14
 cd %{_builddir}
-tar xf %{_sourcedir}/scx-2025-06-12-23-09-40.tar.gz
-cd %{_builddir}/scx-1.0.13
+tar xf %{_sourcedir}/scx-2025-07-08-22-49-03.tar.gz
+cd %{_builddir}/scx-1.0.14
 mkdir -p ./vendor
-cp -r %{_builddir}/scx-2025-06-12-23-09-40/. %{_builddir}/scx-1.0.13/./vendor
+cp -r %{_builddir}/scx-2025-07-08-22-49-03/. %{_builddir}/scx-1.0.14/./vendor
 %patch -P 1 -p1
 mkdir -p .cargo
 echo '
@@ -111,7 +108,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1749772889
+export SOURCE_DATE_EPOCH=1752017475
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -131,6 +128,13 @@ meson --libdir=lib64 --prefix=/usr --buildtype=plain -Dopenrc=disabled \
 -Dlibbpf_a=disabled \
 -Dbpftool=/usr/bin/bpftool  builddir
 ninja -v -C builddir
+
+%check
+export LANG=C.UTF-8
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+meson test -C builddir --print-errorlogs
 
 %install
 export GCC_IGNORE_WERROR=1
@@ -167,812 +171,790 @@ cp %{_builddir}/scx-%{version}/scheds/rust/scx_rusty/LICENSE %{buildroot}/usr/sh
 cp %{_builddir}/scx-%{version}/scheds/rust/scx_tickless/LICENSE %{buildroot}/usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c || :
 cp %{_builddir}/scx-%{version}/scheds/rust/scx_wd40/LICENSE %{buildroot}/usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c || :
 cp %{_builddir}/scx-%{version}/tools/scxctl/LICENSE %{buildroot}/usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/addr2line/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/addr2line/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9b76a43221967e5c55c4183406e1ebc7417da61d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/adler2/LICENSE-0BSD %{buildroot}/usr/share/package-licenses/scx/3aedaafe8ea8fce424d1df3be32d1b8816944e0e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/adler2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/adler2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ahash/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ahash/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2646b6d2453275031022ab245a3a6d5da4ba80b2 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/aho-corasick/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/aho-corasick/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/aho-corasick/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/allocator-api2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/96c0ace4eb1b0a78134d978d3c6d656a860a670f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/android-tzdata/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/db8bf4070b91bbabe0f14d1c15f0be86793fab6a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/android-tzdata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2c87153926f8a458cffc9a435e15571ba721c2fa || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/android_system_properties/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a8ab3e6caa5e7af0ec9235d5db800ace830c0a38 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/android_system_properties/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ac0bf7546a377351144d930c5e31eff058fe4e8f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstream/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstream/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-parse/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/92170cdc034b2ff819323ff670d3b7266c8bffcd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-parse/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/64a8c11fd0f3068e743bfc681bcbef4f50a6b779 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-query/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-query/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-wincon-3.0.6/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-wincon-3.0.6/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/33dbd2d99ad231460bbb01812a52c85e577bd9ba || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-wincon/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle-wincon/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/33dbd2d99ad231460bbb01812a52c85e577bd9ba || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anstyle/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f911b0506e6ba6a56b4edac717b461799f380ef0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anyhow/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/anyhow/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/arraydeque/LICENSE %{buildroot}/usr/share/package-licenses/scx/a8fb55efb8b24d45bc5eaee03acc261dbfce7b27 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/arrayvec/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/arrayvec/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/1ed710abaa8e6f1039a65ee19db6b19804514a75 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-broadcast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/3389b1fc45edfdd16c95926164ecf61e8369c9d8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-broadcast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2df5d31b2f1da55a1d251084b2b47afe37eb9dde || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-executor/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-executor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-fs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-fs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-io/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-io/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-lock/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-lock/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-process/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-process/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-recursion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/b95542c0be3bd915a1e7d8df80711fce5cd0795b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-recursion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-signal/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-signal/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-task/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-task/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-trait/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/async-trait/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/atomic-waker/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/atomic-waker/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/atomic-waker/LICENSE-THIRD-PARTY %{buildroot}/usr/share/package-licenses/scx/709be9d07c00197f2e96593f4cd84f975c4e9f5f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/autocfg/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/autocfg/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e6d32072ef5f584a805b429ecbd4eec428316dde || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/backtrace/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/backtrace/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/base64/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/base64/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b716916e6b0b96af5ecadf1eaee25f966f5d6cb2 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/below-common/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bindgen-0.63.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/8690c5c1d27c8829def121744e5bcd86f48788ef || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bindgen/LICENSE %{buildroot}/usr/share/package-licenses/scx/8690c5c1d27c8829def121744e5bcd86f48788ef || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags-1.3.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags-1.3.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags-2.6.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags-2.6.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitflags/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bitvec/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/aae96e462805b4d3f3737992ffd66729313fcaa6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/block-buffer/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/block-buffer/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/aca18f6eebf597377e59fff1f0e6adbadcdcf97b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/blocking/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/blocking/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/buddy_system_allocator/LICENSE %{buildroot}/usr/share/package-licenses/scx/3ef5bca8d1547379597f6e5fbf37b696d76553a1 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bumpalo-3.16.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bumpalo-3.16.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/0a1e89ac22450cb0311baa2613bc21b7131b321f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bumpalo/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bumpalo/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/0a1e89ac22450cb0311baa2613bc21b7131b321f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/byteorder/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/byteorder/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/byteorder/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/bytes/LICENSE %{buildroot}/usr/share/package-licenses/scx/2510927d07430a2092720e8f4a5287043f75e8d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/camino/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/camino/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cargo-platform/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cargo-platform/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cargo_metadata-0.15.4/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cargo_metadata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cassowary/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8205a96107bd2d30b9a078adcc9eea1bf5eccaf7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cassowary/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/86839b96a62723c6b7892a01b25908ff0c108447 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e5c5af8ddef19fbd109a06b28365d6ab491c5a38 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/castaway/LICENSE %{buildroot}/usr/share/package-licenses/scx/fd33e0d46674b32eb66a5f1134e8d8a2d2f684c9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cc-1.2.7/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cc-1.2.7/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cexpr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cexpr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cd821ffa80099abbc31c22fe770022f3349e0918 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cfg-if/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cfg-if/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cfg_aliases/LICENSE %{buildroot}/usr/share/package-licenses/scx/39806df76979277073594a0c19005c3c7fb17221 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cgroupfs/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/chrono/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/c145b1a607ecf06aed81f1d04a65c2e43dffdc63 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ciborium-io/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ciborium-ll/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ciborium/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clang-sys/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/47b573e3824cd5e02a1a3ae99e2735b49e0256e4 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap-4.5.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap-4.5.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_builder-4.5.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_builder-4.5.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_builder/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_builder/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_complete/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_complete/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_lex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/clap_lex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/colorchoice/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/colorchoice/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/colored-2.2.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/colored/LICENSE %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/compact_str/LICENSE %{buildroot}/usr/share/package-licenses/scx/5c59637187123fdaf921408bc38718e196e5ee9a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/concurrent-queue/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/concurrent-queue/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/config/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/config/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/const-random-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/const-random-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/const-random/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/const-random/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/convert_case/LICENSE %{buildroot}/usr/share/package-licenses/scx/38c843d065d56aa6fb39122a79c0fcecf0b8032e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/core-foundation-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/core-foundation-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/6c2945f449081ab19640fb7c70a081a1a4559399 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cpufeatures/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cpufeatures/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/388871ab0ab7f8ba6aaa0d444a5153f15c918cdb || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crc32fast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crc32fast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8f178d4cc55689ebdd562cabb1282e33bf8f32fe || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/criterion-plot/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/criterion-plot/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b18f451b891c20c5648f7a3034908508f49f015b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/criterion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/criterion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b18f451b891c20c5648f7a3034908508f49f015b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-deque/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-deque/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-epoch/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-epoch/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-queue/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-queue/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-utils/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam-utils/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/d7e0212195bdb37365c9ee28a555d41254fbb775 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossbeam/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossterm-0.25.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossterm/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crossterm_winapi/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crypto-common/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/crypto-common/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7ca2c807379211b3ca6b04f10723088ca423c4fe || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ctrlc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8bec88444202e13c35f17f3057132e6a21c287c1 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ctrlc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/cursive_core/LICENSE %{buildroot}/usr/share/package-licenses/scx/6bfc144b7a3030ef859c0b8c1dc3c82ab287ca6d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/darling/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/darling_core/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/darling_macro/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/deranged/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/13f55d9b7b3a769d76eab5d4a096f7ff24a017be || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/deranged/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ffffe83fef2bd6576c95e851bc81e1f6a641d638 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/derive_deref/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/b4f88f24f74c2d775c9a1f77e1da40c67cc6acc0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/derive_deref/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/351032fe803193ce9cfd5d7a3d18eaf068b5cb6f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/digest/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/digest/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9c6e81caeb170dd5501d39895df9efb657c3c86b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/directories/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/directories/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c037f9fc48de42630cb62476823179cab2e9c8dd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-next/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-next/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cf762fa3609793d5639ba9e1cbd254db276f50d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-sys-next/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-sys-next/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cf762fa3609793d5639ba9e1cbd254db276f50d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dirs-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cf762fa3609793d5639ba9e1cbd254db276f50d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dlv-list/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/dlv-list/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4bde15b9f54119c576abf5af8fedb4272f9b7b1d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/either/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/either/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/encoding_rs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/2b8b815229aa8a61e483fb4ba0588b8b6c491890 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/encoding_rs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b4872d72eb3ccfa74730cc229184eec04f303e7d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/encoding_rs/LICENSE-WHATWG %{buildroot}/usr/share/package-licenses/scx/1e35cd39af07e5460de3011d5ef8f6a775ee54ae || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/endi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map-derive/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map-derive/LICENSES/CC0-1.0.txt %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map-derive/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map/LICENSES/CC0-1.0.txt %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enum-map/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumflags2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8e73926030e5cf210703bbdbd4d5c2a3880b3f71 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumflags2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a2e7dc468fde32fb02ccb9417b5bad304836e267 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumflags2_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7c85e3e83cb61889208968604b387fbd188d49c7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumflags2_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8aa7ac03b16828b3c2263f4d760a779a32d5dd2a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumset/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumset/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/447790f67af7bd0efca7b82e8384ed44e06e8738 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumset_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/enumset_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/447790f67af7bd0efca7b82e8384ed44e06e8738 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/equivalent/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/equivalent/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c371f0a7cbb203643d88566665a452f96bf1ab86 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/erased-serde/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/erased-serde/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/errno/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/errno/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7a842f34e127456338641b14c7a00ec246d89fb6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/event-listener-strategy/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/event-listener-strategy/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/event-listener/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/event-listener/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fastrand/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fastrand/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fb_procfs/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/filetime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/filetime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fixedbitset/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fixedbitset/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/0c160db99de1b5577d1160540f1a1312b01a3f5b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/flate2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/flate2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fnv/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/fnv/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/50121d8b8c9f6483fe17ea679f28f85fe59b2a5a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/funty/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/0a479266cd34fbbab4255fbd83e8df5a9a595929 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-executor/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-executor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-io/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-io/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-lite/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-lite/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-lite/LICENSE-THIRD-PARTY %{buildroot}/usr/share/package-licenses/scx/709be9d07c00197f2e96593f4cd84f975c4e9f5f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-sink/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-sink/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-task/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-task/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-util/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures-util/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/futures/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/generic-array/LICENSE %{buildroot}/usr/share/package-licenses/scx/cb74eb831db08b7fe98f84b59c9bda195e5a3588 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom-0.2.15/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom-0.2.15/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c8eef3d34d69b1d62fd378fa02150a0bce62fd26 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom-0.3.1/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom-0.3.1/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c8eef3d34d69b1d62fd378fa02150a0bce62fd26 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/getrandom/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/16c35c8abc906da3ec35f0515baba3a543ab6501 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/gimli/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/gimli/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/glob/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/glob/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/half/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a6a5418b4d67d9f3a33cbf184b25ac7f9fa87d33 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/half/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/218fc8c15534e8840cbff5801582c450c97869ab || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashbrown-0.14.5/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashbrown-0.14.5/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashbrown/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashbrown/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashlink/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ea4215a6204b8414db6209c378a78a2dfb91c9ee || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hashlink/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f20eb3733ee2e99b63e8ae5f8d64ca9da9329e36 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/heck/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/heck/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hermit-abi-0.3.9/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hermit-abi-0.3.9/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hermit-abi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hermit-abi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/hex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b916da18877fcec3d37860fe60c1189c447e90b9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/home/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/home/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/humantime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/humantime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ff432d95fdfee3587e45abd61685c2209d245901 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/iana-time-zone-haiku/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ff44b187892fcf1cd15a3ca61b498041b28afecc || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/iana-time-zone-haiku/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d3f4001d9de83a122956c9195d73e2507bf6c533 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/iana-time-zone/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ff44b187892fcf1cd15a3ca61b498041b28afecc || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/iana-time-zone/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d3f4001d9de83a122956c9195d73e2507bf6c533 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ident_case/LICENSE %{buildroot}/usr/share/package-licenses/scx/218fc8c15534e8840cbff5801582c450c97869ab || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/indexmap/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/indexmap/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7e5936a6fa3cf3518c01cec41345adf27399fe12 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/indoc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/indoc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/instability/LICENSE.md %{buildroot}/usr/share/package-licenses/scx/f6bb5f42ed0a322738f21a7f294a9451a8db1926 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/is-terminal/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/is-terminal/LICENSE-MIT-atty %{buildroot}/usr/share/package-licenses/scx/ffe3aa1f76c00b737c79c3a17b9e30163a936bc0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/is_terminal_polyfill/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/is_terminal_polyfill/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itertools-0.10.5/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itertools-0.10.5/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itertools/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itertools/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itoa/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/itoa/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/js-sys-0.3.76/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/js-sys-0.3.76/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/js-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/js-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lazy_static/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lazy_static/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lazycell/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lazycell/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/bce2ed71de8bb33db2d29a5fcadd7407824e9248 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-cargo/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/34c5034377edef1080538bd0d4f5cf9b78e22dff || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-cargo/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-rs/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/34c5034377edef1080538bd0d4f5cf9b78e22dff || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-rs/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/COPYING %{buildroot}/usr/share/package-licenses/scx/8624bcdae55baeef00cd11d5dfcfa60f68710a02 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/COPYING-GPLV2 %{buildroot}/usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/COPYING-LGPLV3 %{buildroot}/usr/share/package-licenses/scx/f45ee1c765646813b442ca58de72e20a64a7ddba || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/doc/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/doc/man3/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/elfutils/doc/man7/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/libbpf/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/419ec3c0b11c7d22472ea99c03c347413a4ea406 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/libbpf/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libbpf-sys/zlib/LICENSE %{buildroot}/usr/share/package-licenses/scx/233f44af3fb55dcc7fddfef8e77ac627b0008756 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/36d69bcb88153a640740000efe933b009420ce7e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libloading/LICENSE %{buildroot}/usr/share/package-licenses/scx/4ad37fc99fecc5cda018043361f5b12e350e4052 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/libredox/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5a7ee42dcefea5415e6af50baca4e0c338bd8fe || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys-0.4.15/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys-0.4.15/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys-0.4.15/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/linux-raw-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lock_api/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lock_api/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log-0.4.22/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log-0.4.22/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log-panics/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log-panics/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ab8f497fedf7776763827d658fa68c45b8698039 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/log/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/lru/LICENSE %{buildroot}/usr/share/package-licenses/scx/9646201d104be96a96cfd1a632fb960e1da7a2d2 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/maplit/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/maplit/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/matchers/LICENSE %{buildroot}/usr/share/package-licenses/scx/739a40593cfdae7ce8d08836b16d0a0af314fff8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memchr/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memchr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memchr/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memmap2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/c1f96d6a54446beefad79ef49b3c123c597b7a40 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memmap2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d5c0c6beed5e77d571189516c53cf05f1e58d9ca || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memoffset-0.6.5/LICENSE %{buildroot}/usr/share/package-licenses/scx/02bf11a87b9bbacedf2fcf4856af3b933faef82e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/memoffset/LICENSE %{buildroot}/usr/share/package-licenses/scx/02bf11a87b9bbacedf2fcf4856af3b933faef82e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/minimal-lexical/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5feaf15b3fa7d2d226d811e5fcd49098a1ea520c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/minimal-lexical/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/minimal-lexical/LICENSE.md %{buildroot}/usr/share/package-licenses/scx/cd3fe820606ed34ac2591caf068c7cabd3ab3509 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/miniz_oxide/LICENSE %{buildroot}/usr/share/package-licenses/scx/18d7fe3c54698817feec1f2e04a9d5a0f046a80c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/miniz_oxide/LICENSE-APACHE.md %{buildroot}/usr/share/package-licenses/scx/598f87f072f66e2269dd6919292b2934dbb20492 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/miniz_oxide/LICENSE-MIT.md %{buildroot}/usr/share/package-licenses/scx/18d7fe3c54698817feec1f2e04a9d5a0f046a80c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/miniz_oxide/LICENSE-ZLIB.md %{buildroot}/usr/share/package-licenses/scx/11f0f1bee61ba6393c3dc7aefee7b92b604ff6c0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/mio-0.8.11/LICENSE %{buildroot}/usr/share/package-licenses/scx/27541df8e6d877c3912bbe4c48711f36e826cc5b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/mio/LICENSE %{buildroot}/usr/share/package-licenses/scx/27541df8e6d877c3912bbe4c48711f36e826cc5b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/multimap/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/multimap/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/512f61f7fe734aa8f08ede10a9ccd51826d6ea06 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/nix-0.25.1/LICENSE %{buildroot}/usr/share/package-licenses/scx/a6fe1503554eb18138838c526d150f58fc104133 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/nix/LICENSE %{buildroot}/usr/share/package-licenses/scx/a6fe1503554eb18138838c526d150f58fc104133 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/nom/LICENSE %{buildroot}/usr/share/package-licenses/scx/27ea6989d4f34b7b944eb884410a31ae20d11686 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ntapi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/95606c72511bbbbeeecbdb16101d614a4680e622 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ntapi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/6dd934749d3a64b9990030d688a6b3b17ad1004d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/nu-ansi-term/LICENCE %{buildroot}/usr/share/package-licenses/scx/fea05fa01bac661c706e9e134d9d80b2248bb065 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-complex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-complex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-conv/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/c54e008a9d57391b98e60b14c8dc524acd7b2df9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-conv/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/18f13b198a4a6248c4ce96a0f82de708bc68fd0c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-format/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/86a26246da59350cdb3c19302e89d99344e86934 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-format/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/382a836c42320ca24caa8dce42ea377814a052fd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-integer/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-integer/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-iter/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-iter/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-rational/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-rational/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-traits/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num-traits/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num_cpus/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num_cpus/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ec9737a4e769cce48d5c95d9c75a4ba5f29a2563 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num_threads/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/d7922ed0153e53eb7d63ea3fcae1040472c67679 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/num_threads/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/31e133ad6e12ed607bafa6decc49865e76e2a8e0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/object/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/object/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/dd2f4bd6d87fe2780fc8e4135ce7dac6ff0b33ee || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/once_cell-1.20.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/once_cell-1.20.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/once_cell/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/once_cell/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/oorandom/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/83f84f78511c0e3dc95622f9a0b6e151a9ae4ea5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/openat/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/openat/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/04b6b2b9155b8ad320f9e445e4428317525a30e1 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/option-ext/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/8fcc05c0dd9d9c76e948120c9520e4cbe85fb527 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ordered-float/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/108bb98fdf8f27765ea240d80481be8362175ca7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ordered-multimap/LICENSE %{buildroot}/usr/share/package-licenses/scx/c871fe95e49dbb02c10eedd3f7aec82fcd6fcd53 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ordered-stream/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ordered-stream/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/overload/LICENSE %{buildroot}/usr/share/package-licenses/scx/839963b8e6356d7d297f5124373d62b4c88ac3a8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/owning_ref/LICENSE %{buildroot}/usr/share/package-licenses/scx/0830b129c726d14e89b9aefce5d86164e5d5fc55 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking_lot/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking_lot/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking_lot_core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/parking_lot_core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/paste/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/paste/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pathdiff/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e1407ae1e6330b00341bc7e2bd448921bd79194a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pathdiff/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/peeking_take_while/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/peeking_take_while/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_generator/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_generator/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_meta/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pest_meta/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/petgraph/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/petgraph/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pin-project-lite/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/598f87f072f66e2269dd6919292b2934dbb20492 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pin-project-lite/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pin-utils/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a2f60339450a52e61c6c1e27dc44bd1e671ad28e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pin-utils/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/91abce61ea0c1c313bb5ba31f04196490960a479 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/piper/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/piper/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pkg-config/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/pkg-config/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/plain/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/plain/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/07794acd3a6dba20df973ea835bfafc0ea928962 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/polling/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/polling/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/powerfmt/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/2ef5dbf415191a7880f5baa5ab1997a807967c13 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/powerfmt/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5641ab41a62889b9a22161d95f174fc889dd9660 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ppv-lite86/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/088830dcb78eba1a2052df69bd5cba5445e8f2d7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ppv-lite86/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e1c86f32641f01a5b85d6e9b20138e8470b883fc || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prettyplease-0.2.27/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prettyplease-0.2.27/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prettyplease/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prettyplease/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro-crate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro-crate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro2-1.0.92/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro2-1.0.92/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/proc-macro2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs-core/COPYRIGHT.txt %{buildroot}/usr/share/package-licenses/scx/f131ca4dacb84947538cb4dde7b11dff88d65193 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9153ebde55eff1debbeeba31eabde5404975b0d5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs/COPYRIGHT.txt %{buildroot}/usr/share/package-licenses/scx/f131ca4dacb84947538cb4dde7b11dff88d65193 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/procfs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9153ebde55eff1debbeeba31eabde5404975b0d5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prost-build/LICENSE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prost-derive/LICENSE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prost-types/LICENSE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/prost/LICENSE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/quote/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/quote/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/radium/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/2b53321669a0011ed2792f011f95dd16616453fb || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/4632a631b427f005d97734ea8c6a44090fec5cd9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_chacha/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_chacha/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_chacha/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_core/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/0ff30cb09f7056217d089f352fe089b49971eeae || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rand_core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ratatui/LICENSE %{buildroot}/usr/share/package-licenses/scx/51386ae5a11a72e05db629d63588c9f1cfda8d1e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rayon-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rayon-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rayon/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rayon/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/redox_syscall/LICENSE %{buildroot}/usr/share/package-licenses/scx/a00165152c82ea55b9fc254890dc8860c25e3bb6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/redox_users/LICENSE %{buildroot}/usr/share/package-licenses/scx/c56bd0668edca4d06b6cd881d4d2839da53058cd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata-0.1.10/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata-0.1.10/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata-0.1.10/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata-0.1.10/data/fowler-tests/LICENSE %{buildroot}/usr/share/package-licenses/scx/553e82bef8637312393c95bc62e23e8f81fd9e47 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata-0.1.10/data/tests/fowler/LICENSE %{buildroot}/usr/share/package-licenses/scx/553e82bef8637312393c95bc62e23e8f81fd9e47 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-automata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax-0.6.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax-0.6.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax-0.6.29/src/unicode_tables/LICENSE-UNICODE %{buildroot}/usr/share/package-licenses/scx/68d12a03b339648117165b9c021b93f26974d6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex-syntax/src/unicode_tables/LICENSE-UNICODE %{buildroot}/usr/share/package-licenses/scx/68d12a03b339648117165b9c021b93f26974d6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/regex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ron/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ron/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/dc7b94cb50ea2d34426f3bb935b2c68ed94a9844 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rust-ini/LICENSE %{buildroot}/usr/share/package-licenses/scx/3be75c56654f4e036fcf0d192de9f5ec70521890 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-demangle/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-demangle/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash-1.1.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash-1.1.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash-2.1.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash-2.1.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustc-hash/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.43/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.43/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.43/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.44/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.44/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix-0.38.44/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustix/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustversion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/rustversion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ryu-1.0.18/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ryu-1.0.18/LICENSE-BOOST %{buildroot}/usr/share/package-licenses/scx/3cba29011be2b9d59f6204d6fa0a386b1b2dbd90 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ryu/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ryu/LICENSE-BOOST %{buildroot}/usr/share/package-licenses/scx/3cba29011be2b9d59f6204d6fa0a386b1b2dbd90 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/same-file/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/same-file/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2ad1215c12bd0a3492399dc438aa63084323c662 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/same-file/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/scopeguard/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/scopeguard/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f498d95a48889a0b1432e420e6754881eff1d593 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/seccomp-sys/LICENSE %{buildroot}/usr/share/package-licenses/scx/4c04c844a5cb16b3629d0052f1304b7a565bd4a8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/semver-1.0.24/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/semver-1.0.24/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/semver/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/semver/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_json-%{version}5/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_json-%{version}5/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_json/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_json/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_repr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_repr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_spanned/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/serde_spanned/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sha2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sha2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/1741e5596832e62cd0791301fc9dcf4b9d0bc2c9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sharded-slab/LICENSE %{buildroot}/usr/share/package-licenses/scx/f591e1908efe604899b6cdcf5716e96665852778 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/shlex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a97a2888bca904918b3b9ec008fde1d6e9905a6d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/shlex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/64e8197cb5ae680fcf996cc0ac8760e9f1e2e3a6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook-mio/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook-mio/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook-registry/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook-registry/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/signal-hook/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/simple_logger/LICENSE %{buildroot}/usr/share/package-licenses/scx/c71acd443a1bd9ebd408a1d46f95aefc497d63df || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/simplelog/LICENSE.APACHE2 %{buildroot}/usr/share/package-licenses/scx/f0b513a735cc88cc1f37c5ee0caec2a9e154bd86 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/simplelog/LICENSE.MIT %{buildroot}/usr/share/package-licenses/scx/58aa74a343b597322aabfeff1d8bb94a606e9169 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slab/LICENSE %{buildroot}/usr/share/package-licenses/scx/96f019e8abadc7a87b330a697504d874a1c06268 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog-term/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog-term/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog-term/LICENSE-MPL2 %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/slog/LICENSE-MPL2 %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/smallvec/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/smallvec/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c61640f6c218caf86d1b8072e09668a8362dba04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/smartstring/LICENCE.md %{buildroot}/usr/share/package-licenses/scx/7c1853ff34974a6b19247c039a0f60e06438f877 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/socket2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/socket2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sorted-vec-0.8.5/LICENSE %{buildroot}/usr/share/package-licenses/scx/5ca358cc56a941b6c2b6c4cfadb924ad8faf7b56 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sorted-vec/LICENSE %{buildroot}/usr/share/package-licenses/scx/5ca358cc56a941b6c2b6c4cfadb924ad8faf7b56 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sscanf/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sscanf/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/421c13de9d76147548110f1f61737d11ade5530c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sscanf_macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sscanf_macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/421c13de9d76147548110f1f61737d11ade5530c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/stable_deref_trait/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/stable_deref_trait/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f81793ddf50f460d6111fcbc799cab1a804aa000 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/static_assertions/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/2b8b815229aa8a61e483fb4ba0588b8b6c491890 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/static_assertions/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/972723ef8f594b1c7515e4c227ff9d5912041fac || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strip-ansi-escapes/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strip-ansi-escapes/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/eaf6e84be577d04f65f4f63136ed8c616a8970fd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strsim-0.10.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5feee4154156527645a9b18ef29da23fc859ca9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strsim/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5feee4154156527645a9b18ef29da23fc859ca9 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strum/LICENSE %{buildroot}/usr/share/package-licenses/scx/967573fc64a706430e19b4942fe728870c8182f8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/strum_macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/967573fc64a706430e19b4942fe728870c8182f8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn-1.0.109/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn-1.0.109/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn-2.0.95/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn-2.0.95/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/syn/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/sysinfo/LICENSE %{buildroot}/usr/share/package-licenses/scx/f83864fda2a313306dfb3de8b01a36830a057a46 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tap/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/cd9883e58015ea0ea30394b147d796bffd6ce809 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tar/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tar/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tempfile-3.16.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tempfile-3.16.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tempfile/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tempfile/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/term/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/term/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/84d2c544ebf5c18b313d1ebae8c2ac7cf1856f7d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/termcolor/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/termcolor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/termcolor/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/terminal_size/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/terminal_size/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e08d1736c80198e1adec92ff27482e7abbc42d86 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-1.0.69/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-1.0.69/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-impl-1.0.69/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-impl-1.0.69/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-impl/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror-impl/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thiserror/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thread_local/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/thread_local/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/threadpool/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/threadpool/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time-core/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/13f55d9b7b3a769d76eab5d4a096f7ff24a017be || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ffffe83fef2bd6576c95e851bc81e1f6a641d638 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time-macros/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/75b9500512bb4d24722887e64a982c51e6bdcc4c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time-macros/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/03431277c040357c85596083ac918eb591ac04ac || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/75b9500512bb4d24722887e64a982c51e6bdcc4c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/time/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/03431277c040357c85596083ac918eb591ac04ac || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tiny-keccak/LICENSE %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tinytemplate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tinytemplate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5875ddc227c505ff2ad6e06538e1d72d403b9060 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tokio-macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/f4b578f96a550c1bc177029711f23d33edaceae2 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tokio-util/LICENSE %{buildroot}/usr/share/package-licenses/scx/76af2051c1ebfe06b88b7bcc497ce81ec4295752 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tokio/LICENSE %{buildroot}/usr/share/package-licenses/scx/76af2051c1ebfe06b88b7bcc497ce81ec4295752 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml_datetime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml_datetime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml_edit/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/toml_edit/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-attributes/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-core/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-core/src/spin/LICENSE %{buildroot}/usr/share/package-licenses/scx/0956f8ac49e23a546fb113f711d7cdc0c3e98c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-error/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-log/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing-subscriber/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/tracing/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/typenum/LICENSE %{buildroot}/usr/share/package-licenses/scx/481e4be7d70c11ee3f6e04a59a0e5afccc551db2 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/typenum/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/69facfd64b2a7aa4a22c917ef10cd96e41b75b87 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/typenum/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5984f5244c7bc13bf15a5bea823c04ec0bbc714f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ucd-trie/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/ucd-trie/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/uds_windows/LICENSE %{buildroot}/usr/share/package-licenses/scx/03e1fe6fd0bc6d73c3cd3370d5f0a73c4fcb60d6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicase/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicase/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/576a5b2a10d97104f8fdc9dfecb7f7493edff30f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-ident-1.0.14/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-ident-1.0.14/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-ident/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-ident/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-segmentation/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-segmentation/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-segmentation/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-truncate/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-truncate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-truncate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8c8867dbe260a6b77229621a8f55979f7d92ec95 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width-0.1.12/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width-0.1.12/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width-0.1.12/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-width/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-xid/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-xid/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/unicode-xid/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/utf8parse/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/utf8parse/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/93074692b8a28bef1743c44a9e5b97b1401c0d09 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vergen/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vergen/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/version-compare/LICENSE %{buildroot}/usr/share/package-licenses/scx/bbca91a10afe6e9d066acdd53930d0c47eb08803 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/version_check/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/version_check/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cfcb552ef0afbe7ccb4128891c0de00685988a4b || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vsprintf/LICENSE %{buildroot}/usr/share/package-licenses/scx/3a82a09bd5548ac4dc252a273ca9cdc2fd52ea69 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vte/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vte/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/93074692b8a28bef1743c44a9e5b97b1401c0d09 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vte_generate_state_changes/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/vte_generate_state_changes/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/93074692b8a28bef1743c44a9e5b97b1401c0d09 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/walkdir/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/walkdir/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/walkdir/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.13.3+wasi-0.2.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.13.3+wasi-0.2.2/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi-0.13.3+wasi-0.2.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-backend-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-backend-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-backend/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-backend/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-support-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-support-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-support/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro-support/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-shared-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-shared-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-shared/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen-shared/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wasm-bindgen/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/web-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/web-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/which/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/a8ced9a6c206a0e47fac6c6d0d0ce839e85b2eb7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/widestring/LICENSE %{buildroot}/usr/share/package-licenses/scx/b37ac973bb994b8f572a333b2617bddabca57d7d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/widestring/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/widestring/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winapi-util/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winapi-util/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2ad1215c12bd0a3492399dc438aa63084323c662 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winapi-util/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winapi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/92170cdc034b2ff819323ff670d3b7266c8bffcd || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winapi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2243f7a86daaa727d34d92e987a741036f288464 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-core-0.52.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-core-0.52.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-core/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-core/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-implement/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-implement/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-interface/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-interface/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-result/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-result/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys-0.48.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys-0.48.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys-0.52.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys-0.52.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-sys/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-targets-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-targets-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-targets/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows-targets/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_gnullvm-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_gnullvm-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_aarch64_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnu-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnu-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnu/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnu/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_i686_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnu-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnu-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnu/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnu/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnullvm-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnullvm-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/windows_x86_64_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winnow-0.6.22/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c0955b5351b1dcafdd0b9bb2d7e84fe0e3d731ca || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/winnow/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c0955b5351b1dcafdd0b9bb2d7e84fe0e3d731ca || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wrapcenum-derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/b6c39038a6c6399070199d86249c50a6774ca1c3 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wrapcenum-derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/082abb1078b3e148973a2d0ebda778a2c2e728ae || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/wyz/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/aae96e462805b4d3f3737992ffd66729313fcaa6 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/xattr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/xattr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/xdg-home/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/xdg/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/xdg/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/yaml-rust2/LICENSE %{buildroot}/usr/share/package-licenses/scx/83318fcbbc7308acfd2e5101513a142d100bff6d || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/yaml-rust2/tests/yaml-test-suite/License %{buildroot}/usr/share/package-licenses/scx/8dd5ea7754384f29ef4a688de3aa05429cb2af13 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zbus/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zbus_macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zbus_names/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy-derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ebbc0758a0322f1bfe28f5438867a084e53941c8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy-derive/LICENSE-BSD %{buildroot}/usr/share/package-licenses/scx/46aace8adc5b06990d9ee2b6bd555ea03c4df7a1 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy-derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/493b3ee6eb0b5b24708a0a07ab11ad2bc1b49c9c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ebbc0758a0322f1bfe28f5438867a084e53941c8 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy/LICENSE-BSD %{buildroot}/usr/share/package-licenses/scx/46aace8adc5b06990d9ee2b6bd555ea03c4df7a1 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/493b3ee6eb0b5b24708a0a07ab11ad2bc1b49c9c || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy/src/third_party/rust/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zerocopy/src/third_party/rust/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zvariant/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zvariant_derive/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
-cp %{_builddir}/scx-2025-06-12-23-09-40/zvariant_utils/LICENSE %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/addr2line/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/addr2line/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9b76a43221967e5c55c4183406e1ebc7417da61d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/adler2/LICENSE-0BSD %{buildroot}/usr/share/package-licenses/scx/3aedaafe8ea8fce424d1df3be32d1b8816944e0e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/adler2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/adler2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ahash/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ahash/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2646b6d2453275031022ab245a3a6d5da4ba80b2 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/aho-corasick/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/aho-corasick/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/aho-corasick/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/allocator-api2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/96c0ace4eb1b0a78134d978d3c6d656a860a670f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/android-tzdata/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/db8bf4070b91bbabe0f14d1c15f0be86793fab6a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/android-tzdata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2c87153926f8a458cffc9a435e15571ba721c2fa || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/android_system_properties/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a8ab3e6caa5e7af0ec9235d5db800ace830c0a38 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/android_system_properties/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ac0bf7546a377351144d930c5e31eff058fe4e8f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstream/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstream/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-parse/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/92170cdc034b2ff819323ff670d3b7266c8bffcd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-parse/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/64a8c11fd0f3068e743bfc681bcbef4f50a6b779 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-query/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-query/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-wincon-3.0.6/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-wincon-3.0.6/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/33dbd2d99ad231460bbb01812a52c85e577bd9ba || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-wincon/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle-wincon/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/33dbd2d99ad231460bbb01812a52c85e577bd9ba || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anstyle/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f911b0506e6ba6a56b4edac717b461799f380ef0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anyhow/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/anyhow/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/arraydeque/LICENSE %{buildroot}/usr/share/package-licenses/scx/a8fb55efb8b24d45bc5eaee03acc261dbfce7b27 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/arrayvec/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/arrayvec/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/1ed710abaa8e6f1039a65ee19db6b19804514a75 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-broadcast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/3389b1fc45edfdd16c95926164ecf61e8369c9d8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-broadcast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2df5d31b2f1da55a1d251084b2b47afe37eb9dde || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-executor/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-executor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-fs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-fs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-io/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-io/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-lock/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-lock/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-process/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-process/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-recursion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/b95542c0be3bd915a1e7d8df80711fce5cd0795b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-recursion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-signal/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-signal/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-task/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-task/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-trait/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/async-trait/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/atomic-waker/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/atomic-waker/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/atomic-waker/LICENSE-THIRD-PARTY %{buildroot}/usr/share/package-licenses/scx/709be9d07c00197f2e96593f4cd84f975c4e9f5f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/autocfg/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/autocfg/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e6d32072ef5f584a805b429ecbd4eec428316dde || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/backtrace/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/backtrace/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/base64/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/base64/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b716916e6b0b96af5ecadf1eaee25f966f5d6cb2 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/below-common/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bindgen-0.63.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/8690c5c1d27c8829def121744e5bcd86f48788ef || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bindgen/LICENSE %{buildroot}/usr/share/package-licenses/scx/8690c5c1d27c8829def121744e5bcd86f48788ef || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags-1.3.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags-1.3.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags-2.6.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags-2.6.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitflags/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bitvec/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/aae96e462805b4d3f3737992ffd66729313fcaa6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/block-buffer/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/block-buffer/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/aca18f6eebf597377e59fff1f0e6adbadcdcf97b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/blocking/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/blocking/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/buddy_system_allocator/LICENSE %{buildroot}/usr/share/package-licenses/scx/3ef5bca8d1547379597f6e5fbf37b696d76553a1 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bumpalo-3.16.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bumpalo-3.16.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/0a1e89ac22450cb0311baa2613bc21b7131b321f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bumpalo/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bumpalo/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/0a1e89ac22450cb0311baa2613bc21b7131b321f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/byteorder/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/byteorder/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/byteorder/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/bytes/LICENSE %{buildroot}/usr/share/package-licenses/scx/2510927d07430a2092720e8f4a5287043f75e8d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/camino/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/camino/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cargo-platform/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cargo-platform/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cargo_metadata-0.15.4/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cargo_metadata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cassowary/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8205a96107bd2d30b9a078adcc9eea1bf5eccaf7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cassowary/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/86839b96a62723c6b7892a01b25908ff0c108447 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e5c5af8ddef19fbd109a06b28365d6ab491c5a38 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/castaway/LICENSE %{buildroot}/usr/share/package-licenses/scx/fd33e0d46674b32eb66a5f1134e8d8a2d2f684c9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cc-1.2.7/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cc-1.2.7/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cexpr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cexpr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cd821ffa80099abbc31c22fe770022f3349e0918 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cfg-if/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cfg-if/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cfg_aliases/LICENSE %{buildroot}/usr/share/package-licenses/scx/39806df76979277073594a0c19005c3c7fb17221 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cgroupfs/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/chrono/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/c145b1a607ecf06aed81f1d04a65c2e43dffdc63 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ciborium-io/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ciborium-ll/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ciborium/LICENSE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clang-sys/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/47b573e3824cd5e02a1a3ae99e2735b49e0256e4 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap-4.5.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap-4.5.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap-num/LICENSE %{buildroot}/usr/share/package-licenses/scx/9882b0873015c1a691a7533caba8fa3a48917ca9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_builder-4.5.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_builder-4.5.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_builder/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_builder/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_complete/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_complete/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_lex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/clap_lex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/colorchoice/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/colorchoice/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/colored-2.2.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/colored/LICENSE %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/compact_str/LICENSE %{buildroot}/usr/share/package-licenses/scx/5c59637187123fdaf921408bc38718e196e5ee9a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/concurrent-queue/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/concurrent-queue/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/config/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/config/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/const-random-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/const-random-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/const-random/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/const-random/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/convert_case/LICENSE %{buildroot}/usr/share/package-licenses/scx/38c843d065d56aa6fb39122a79c0fcecf0b8032e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/core-foundation-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/core-foundation-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/6c2945f449081ab19640fb7c70a081a1a4559399 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cpufeatures/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cpufeatures/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/388871ab0ab7f8ba6aaa0d444a5153f15c918cdb || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crc32fast/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crc32fast/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8f178d4cc55689ebdd562cabb1282e33bf8f32fe || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/criterion-plot/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/criterion-plot/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b18f451b891c20c5648f7a3034908508f49f015b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/criterion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/criterion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b18f451b891c20c5648f7a3034908508f49f015b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-deque/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-deque/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-epoch/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-epoch/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-queue/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-queue/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-utils/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam-utils/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/d7e0212195bdb37365c9ee28a555d41254fbb775 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossbeam/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/144111aa0f14ef5a181326683aa9ebbd9252bca6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossterm-0.25.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossterm/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crossterm_winapi/LICENSE %{buildroot}/usr/share/package-licenses/scx/94600bc2fcc5ecceeef40cd26c8c04d09f7d86fd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crypto-common/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/crypto-common/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7ca2c807379211b3ca6b04f10723088ca423c4fe || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ctrlc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8bec88444202e13c35f17f3057132e6a21c287c1 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ctrlc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/cursive_core/LICENSE %{buildroot}/usr/share/package-licenses/scx/6bfc144b7a3030ef859c0b8c1dc3c82ab287ca6d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/darling/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/darling_core/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/darling_macro/LICENSE %{buildroot}/usr/share/package-licenses/scx/cc1662c1ffded2451f1b822c62ec085862bd5816 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/deranged/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/13f55d9b7b3a769d76eab5d4a096f7ff24a017be || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/deranged/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ffffe83fef2bd6576c95e851bc81e1f6a641d638 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/digest/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/digest/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9c6e81caeb170dd5501d39895df9efb657c3c86b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dirs-next/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dirs-next/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cf762fa3609793d5639ba9e1cbd254db276f50d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dirs-sys-next/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/43a3a49bd7af636c923a5ae475395b8e29320529 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dirs-sys-next/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cf762fa3609793d5639ba9e1cbd254db276f50d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dlv-list/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/dlv-list/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4bde15b9f54119c576abf5af8fedb4272f9b7b1d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/either/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/either/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/encoding_rs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/2b8b815229aa8a61e483fb4ba0588b8b6c491890 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/encoding_rs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b4872d72eb3ccfa74730cc229184eec04f303e7d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/encoding_rs/LICENSE-WHATWG %{buildroot}/usr/share/package-licenses/scx/1e35cd39af07e5460de3011d5ef8f6a775ee54ae || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/endi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map-derive/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map-derive/LICENSES/CC0-1.0.txt %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map-derive/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map/LICENSES/CC0-1.0.txt %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enum-map/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumflags2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/8e73926030e5cf210703bbdbd4d5c2a3880b3f71 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumflags2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a2e7dc468fde32fb02ccb9417b5bad304836e267 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumflags2_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7c85e3e83cb61889208968604b387fbd188d49c7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumflags2_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8aa7ac03b16828b3c2263f4d760a779a32d5dd2a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumset/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumset/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/447790f67af7bd0efca7b82e8384ed44e06e8738 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumset_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/enumset_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/447790f67af7bd0efca7b82e8384ed44e06e8738 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/equivalent/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/equivalent/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c371f0a7cbb203643d88566665a452f96bf1ab86 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/erased-serde/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/erased-serde/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/errno/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/errno/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7a842f34e127456338641b14c7a00ec246d89fb6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/event-listener-strategy/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/event-listener-strategy/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/event-listener/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/event-listener/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/fastrand/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/fastrand/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/fb_procfs/LICENSE %{buildroot}/usr/share/package-licenses/scx/5a7d7df655ba40478fae80a6abafc6afc36f9b6a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/filetime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/filetime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/flate2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/flate2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/fnv/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/fnv/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/50121d8b8c9f6483fe17ea679f28f85fe59b2a5a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/funty/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/0a479266cd34fbbab4255fbd83e8df5a9a595929 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-channel/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-channel/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-executor/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-executor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-io/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-io/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-lite/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-lite/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-lite/LICENSE-THIRD-PARTY %{buildroot}/usr/share/package-licenses/scx/709be9d07c00197f2e96593f4cd84f975c4e9f5f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-sink/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-sink/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-task/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-task/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-util/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures-util/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/futures/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/067f31555f328efb78075174add7db97d98618c6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/generic-array/LICENSE %{buildroot}/usr/share/package-licenses/scx/cb74eb831db08b7fe98f84b59c9bda195e5a3588 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom-0.2.15/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom-0.2.15/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c8eef3d34d69b1d62fd378fa02150a0bce62fd26 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom-0.3.1/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom-0.3.1/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c8eef3d34d69b1d62fd378fa02150a0bce62fd26 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/getrandom/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/16c35c8abc906da3ec35f0515baba3a543ab6501 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/gimli/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/gimli/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/glob/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/glob/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/half/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a6a5418b4d67d9f3a33cbf184b25ac7f9fa87d33 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/half/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/218fc8c15534e8840cbff5801582c450c97869ab || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashbrown-0.14.5/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashbrown-0.14.5/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashbrown/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashbrown/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c9c1c33aee599ebfdfb0bc2aed9ea082d9e3173a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashlink/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ea4215a6204b8414db6209c378a78a2dfb91c9ee || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hashlink/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f20eb3733ee2e99b63e8ae5f8d64ca9da9329e36 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/heck/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/heck/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hermit-abi-0.3.9/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hermit-abi-0.3.9/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hermit-abi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hermit-abi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/hex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/b916da18877fcec3d37860fe60c1189c447e90b9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/home/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/home/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/humantime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/humantime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ff432d95fdfee3587e45abd61685c2209d245901 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/iana-time-zone-haiku/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ff44b187892fcf1cd15a3ca61b498041b28afecc || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/iana-time-zone-haiku/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d3f4001d9de83a122956c9195d73e2507bf6c533 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/iana-time-zone/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ff44b187892fcf1cd15a3ca61b498041b28afecc || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/iana-time-zone/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d3f4001d9de83a122956c9195d73e2507bf6c533 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ident_case/LICENSE %{buildroot}/usr/share/package-licenses/scx/218fc8c15534e8840cbff5801582c450c97869ab || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/indexmap/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/indexmap/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/7e5936a6fa3cf3518c01cec41345adf27399fe12 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/indoc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/indoc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/instability/LICENSE.md %{buildroot}/usr/share/package-licenses/scx/f6bb5f42ed0a322738f21a7f294a9451a8db1926 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/is-terminal/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/is-terminal/LICENSE-MIT-atty %{buildroot}/usr/share/package-licenses/scx/ffe3aa1f76c00b737c79c3a17b9e30163a936bc0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/is_terminal_polyfill/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/is_terminal_polyfill/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itertools-0.10.5/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itertools-0.10.5/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itertools/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itertools/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itoa/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/itoa/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/js-sys-0.3.76/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/js-sys-0.3.76/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/js-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/js-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lazy_static/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lazy_static/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lazycell/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lazycell/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/bce2ed71de8bb33db2d29a5fcadd7407824e9248 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-cargo/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/34c5034377edef1080538bd0d4f5cf9b78e22dff || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-cargo/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-rs/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/34c5034377edef1080538bd0d4f5cf9b78e22dff || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-rs/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/COPYING %{buildroot}/usr/share/package-licenses/scx/8624bcdae55baeef00cd11d5dfcfa60f68710a02 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/COPYING-GPLV2 %{buildroot}/usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/COPYING-LGPLV3 %{buildroot}/usr/share/package-licenses/scx/f45ee1c765646813b442ca58de72e20a64a7ddba || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/doc/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/doc/man3/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/elfutils/doc/man7/COPYING-GFDL %{buildroot}/usr/share/package-licenses/scx/4c0910524984176680adb6b68de639864bc1f8d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/libbpf/LICENSE.BSD-2-Clause %{buildroot}/usr/share/package-licenses/scx/419ec3c0b11c7d22472ea99c03c347413a4ea406 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/libbpf/LICENSE.LGPL-2.1 %{buildroot}/usr/share/package-licenses/scx/91c66db733cf0ff2b3216ec4223b940daf6b26d4 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libbpf-sys/zlib/LICENSE %{buildroot}/usr/share/package-licenses/scx/233f44af3fb55dcc7fddfef8e77ac627b0008756 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libc-0.2.169/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libc-0.2.169/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/36d69bcb88153a640740000efe933b009420ce7e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libc/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libc/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/36d69bcb88153a640740000efe933b009420ce7e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libloading/LICENSE %{buildroot}/usr/share/package-licenses/scx/4ad37fc99fecc5cda018043361f5b12e350e4052 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/libredox/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5a7ee42dcefea5415e6af50baca4e0c338bd8fe || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys-0.4.15/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys-0.4.15/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys-0.4.15/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/linux-raw-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lock_api/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lock_api/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log-0.4.22/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log-0.4.22/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log-panics/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log-panics/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ab8f497fedf7776763827d658fa68c45b8698039 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/log/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/lru/LICENSE %{buildroot}/usr/share/package-licenses/scx/9646201d104be96a96cfd1a632fb960e1da7a2d2 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/maplit/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/maplit/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3a86cfdfa553511b381388859c9e94ce9e1f916b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memchr/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memchr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memchr/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memmap2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/c1f96d6a54446beefad79ef49b3c123c597b7a40 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memmap2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d5c0c6beed5e77d571189516c53cf05f1e58d9ca || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memoffset-0.6.5/LICENSE %{buildroot}/usr/share/package-licenses/scx/02bf11a87b9bbacedf2fcf4856af3b933faef82e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/memoffset/LICENSE %{buildroot}/usr/share/package-licenses/scx/02bf11a87b9bbacedf2fcf4856af3b933faef82e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/minimal-lexical/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5feaf15b3fa7d2d226d811e5fcd49098a1ea520c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/minimal-lexical/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/minimal-lexical/LICENSE.md %{buildroot}/usr/share/package-licenses/scx/cd3fe820606ed34ac2591caf068c7cabd3ab3509 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/miniz_oxide/LICENSE %{buildroot}/usr/share/package-licenses/scx/18d7fe3c54698817feec1f2e04a9d5a0f046a80c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/miniz_oxide/LICENSE-APACHE.md %{buildroot}/usr/share/package-licenses/scx/598f87f072f66e2269dd6919292b2934dbb20492 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/miniz_oxide/LICENSE-MIT.md %{buildroot}/usr/share/package-licenses/scx/18d7fe3c54698817feec1f2e04a9d5a0f046a80c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/miniz_oxide/LICENSE-ZLIB.md %{buildroot}/usr/share/package-licenses/scx/11f0f1bee61ba6393c3dc7aefee7b92b604ff6c0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/mio-0.8.11/LICENSE %{buildroot}/usr/share/package-licenses/scx/27541df8e6d877c3912bbe4c48711f36e826cc5b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/mio/LICENSE %{buildroot}/usr/share/package-licenses/scx/27541df8e6d877c3912bbe4c48711f36e826cc5b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nix-0.25.1/LICENSE %{buildroot}/usr/share/package-licenses/scx/a6fe1503554eb18138838c526d150f58fc104133 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nix/LICENSE %{buildroot}/usr/share/package-licenses/scx/a6fe1503554eb18138838c526d150f58fc104133 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nom/LICENSE %{buildroot}/usr/share/package-licenses/scx/27ea6989d4f34b7b944eb884410a31ae20d11686 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ntapi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/95606c72511bbbbeeecbdb16101d614a4680e622 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ntapi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/6dd934749d3a64b9990030d688a6b3b17ad1004d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-bigint/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-bigint/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-complex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-complex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-conv/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/c54e008a9d57391b98e60b14c8dc524acd7b2df9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-conv/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/18f13b198a4a6248c4ce96a0f82de708bc68fd0c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-format/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/86a26246da59350cdb3c19302e89d99344e86934 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-format/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/382a836c42320ca24caa8dce42ea377814a052fd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-integer/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-integer/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-iter/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-iter/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-rational/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-rational/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-traits/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num-traits/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num_cpus/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num_cpus/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ec9737a4e769cce48d5c95d9c75a4ba5f29a2563 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num_threads/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/d7922ed0153e53eb7d63ea3fcae1040472c67679 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/num_threads/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/31e133ad6e12ed607bafa6decc49865e76e2a8e0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nvml-wrapper-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/99594687f50890ce5047a78421a3be306672d10c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nvml-wrapper-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2404a12291507939fef255f5dc240868a3f409d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nvml-wrapper/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/99594687f50890ce5047a78421a3be306672d10c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/nvml-wrapper/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2404a12291507939fef255f5dc240868a3f409d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/object/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/object/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/dd2f4bd6d87fe2780fc8e4135ce7dac6ff0b33ee || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/once_cell-1.20.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/once_cell-1.20.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/once_cell/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/once_cell/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/oorandom/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/83f84f78511c0e3dc95622f9a0b6e151a9ae4ea5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/openat/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/openat/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/04b6b2b9155b8ad320f9e445e4428317525a30e1 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ordered-float/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/108bb98fdf8f27765ea240d80481be8362175ca7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ordered-multimap/LICENSE %{buildroot}/usr/share/package-licenses/scx/c871fe95e49dbb02c10eedd3f7aec82fcd6fcd53 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ordered-stream/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ordered-stream/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/owning_ref/LICENSE %{buildroot}/usr/share/package-licenses/scx/0830b129c726d14e89b9aefce5d86164e5d5fc55 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking_lot/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking_lot/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking_lot_core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/parking_lot_core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/paste/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/paste/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pathdiff/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e1407ae1e6330b00341bc7e2bd448921bd79194a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pathdiff/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/peeking_take_while/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/peeking_take_while/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_generator/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_generator/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_meta/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pest_meta/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pin-project-lite/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/598f87f072f66e2269dd6919292b2934dbb20492 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pin-project-lite/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pin-utils/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a2f60339450a52e61c6c1e27dc44bd1e671ad28e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pin-utils/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/91abce61ea0c1c313bb5ba31f04196490960a479 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/piper/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/piper/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pkg-config/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/pkg-config/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/plain/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/plain/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/07794acd3a6dba20df973ea835bfafc0ea928962 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/polling/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/polling/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/powerfmt/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/2ef5dbf415191a7880f5baa5ab1997a807967c13 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/powerfmt/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5641ab41a62889b9a22161d95f174fc889dd9660 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ppv-lite86/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/088830dcb78eba1a2052df69bd5cba5445e8f2d7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ppv-lite86/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e1c86f32641f01a5b85d6e9b20138e8470b883fc || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/prettyplease-0.2.27/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/prettyplease-0.2.27/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/prettyplease/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/prettyplease/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro-crate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/1d47c63586fe3be7f228cff1ab0c029b53741875 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro-crate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro2-1.0.92/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro2-1.0.92/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/proc-macro2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs-core/COPYRIGHT.txt %{buildroot}/usr/share/package-licenses/scx/f131ca4dacb84947538cb4dde7b11dff88d65193 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9153ebde55eff1debbeeba31eabde5404975b0d5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs/COPYRIGHT.txt %{buildroot}/usr/share/package-licenses/scx/f131ca4dacb84947538cb4dde7b11dff88d65193 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/procfs/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9153ebde55eff1debbeeba31eabde5404975b0d5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/protobuf-codegen/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/0bcad4f4ae6cf06d8f527e1455efefabcf6ab7bf || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/protobuf-parse/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/ac8e5b4cbc7123a14b1b914781864475ab820426 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/protobuf-support/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/0bcad4f4ae6cf06d8f527e1455efefabcf6ab7bf || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/protobuf/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/0bcad4f4ae6cf06d8f527e1455efefabcf6ab7bf || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/quote/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/quote/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/radium/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/2b53321669a0011ed2792f011f95dd16616453fb || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/4632a631b427f005d97734ea8c6a44090fec5cd9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_chacha/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_chacha/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_chacha/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_core/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/f14afa20edce530124d39cd56312c7781c19b267 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/0ff30cb09f7056217d089f352fe089b49971eeae || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rand_core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/d74ad13f1402c35008f22bc588a6b8199ed164d3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ratatui/LICENSE %{buildroot}/usr/share/package-licenses/scx/51386ae5a11a72e05db629d63588c9f1cfda8d1e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rayon-core/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rayon-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rayon/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rayon/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2bf5cac862d5a0480b5d5bcd3a1852d68bfeee84 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/redox_syscall/LICENSE %{buildroot}/usr/share/package-licenses/scx/a00165152c82ea55b9fc254890dc8860c25e3bb6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/redox_users/LICENSE %{buildroot}/usr/share/package-licenses/scx/c56bd0668edca4d06b6cd881d4d2839da53058cd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-automata/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-automata/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax-0.6.29/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax-0.6.29/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax-0.6.29/src/unicode_tables/LICENSE-UNICODE %{buildroot}/usr/share/package-licenses/scx/68d12a03b339648117165b9c021b93f26974d6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex-syntax/src/unicode_tables/LICENSE-UNICODE %{buildroot}/usr/share/package-licenses/scx/68d12a03b339648117165b9c021b93f26974d6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/regex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ron/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ron/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/dc7b94cb50ea2d34426f3bb935b2c68ed94a9844 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rust-ini/LICENSE %{buildroot}/usr/share/package-licenses/scx/3be75c56654f4e036fcf0d192de9f5ec70521890 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-demangle/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-demangle/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash-1.1.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash-1.1.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash-2.1.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash-2.1.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustc-hash/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/a74c5e048f9ed570eb892f81ca5daf05936475b0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.43/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.43/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.43/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.44/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.44/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix-0.38.44/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustix/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustversion/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/rustversion/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ryu-1.0.18/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ryu-1.0.18/LICENSE-BOOST %{buildroot}/usr/share/package-licenses/scx/3cba29011be2b9d59f6204d6fa0a386b1b2dbd90 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ryu/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ryu/LICENSE-BOOST %{buildroot}/usr/share/package-licenses/scx/3cba29011be2b9d59f6204d6fa0a386b1b2dbd90 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/same-file/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/same-file/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2ad1215c12bd0a3492399dc438aa63084323c662 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/same-file/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/scopeguard/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/scopeguard/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f498d95a48889a0b1432e420e6754881eff1d593 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/seccomp-sys/LICENSE %{buildroot}/usr/share/package-licenses/scx/4c04c844a5cb16b3629d0052f1304b7a565bd4a8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/semver-1.0.24/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/semver-1.0.24/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/semver/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/semver/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_json-1.0.135/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_json-1.0.135/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_json/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_json/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_repr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_repr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_spanned/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/serde_spanned/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sha2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/422e6fd980775f9997ed6735c28a14ad20c222e8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sha2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/1741e5596832e62cd0791301fc9dcf4b9d0bc2c9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/shlex/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/a97a2888bca904918b3b9ec008fde1d6e9905a6d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/shlex/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/64e8197cb5ae680fcf996cc0ac8760e9f1e2e3a6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook-mio/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook-mio/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook-registry/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook-registry/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/signal-hook/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/simple_logger/LICENSE %{buildroot}/usr/share/package-licenses/scx/c71acd443a1bd9ebd408a1d46f95aefc497d63df || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/simplelog/LICENSE.APACHE2 %{buildroot}/usr/share/package-licenses/scx/f0b513a735cc88cc1f37c5ee0caec2a9e154bd86 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/simplelog/LICENSE.MIT %{buildroot}/usr/share/package-licenses/scx/58aa74a343b597322aabfeff1d8bb94a606e9169 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slab/LICENSE %{buildroot}/usr/share/package-licenses/scx/96f019e8abadc7a87b330a697504d874a1c06268 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog-term/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog-term/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog-term/LICENSE-MPL2 %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/slog/LICENSE-MPL2 %{buildroot}/usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/smallvec/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/smallvec/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c61640f6c218caf86d1b8072e09668a8362dba04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/smartstring/LICENCE.md %{buildroot}/usr/share/package-licenses/scx/7c1853ff34974a6b19247c039a0f60e06438f877 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/socket2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/socket2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sorted-vec-0.8.5/LICENSE %{buildroot}/usr/share/package-licenses/scx/5ca358cc56a941b6c2b6c4cfadb924ad8faf7b56 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sorted-vec/LICENSE %{buildroot}/usr/share/package-licenses/scx/5ca358cc56a941b6c2b6c4cfadb924ad8faf7b56 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sscanf/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sscanf/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/421c13de9d76147548110f1f61737d11ade5530c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sscanf_macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/7df059597099bb7dcf25d2a9aedfaf4465f72d8d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sscanf_macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/421c13de9d76147548110f1f61737d11ade5530c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/stable_deref_trait/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/stable_deref_trait/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/f81793ddf50f460d6111fcbc799cab1a804aa000 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/static_assertions/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/2b8b815229aa8a61e483fb4ba0588b8b6c491890 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/static_assertions/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/972723ef8f594b1c7515e4c227ff9d5912041fac || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/strsim-0.10.0/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5feee4154156527645a9b18ef29da23fc859ca9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/strsim/LICENSE %{buildroot}/usr/share/package-licenses/scx/f5feee4154156527645a9b18ef29da23fc859ca9 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/strum/LICENSE %{buildroot}/usr/share/package-licenses/scx/967573fc64a706430e19b4942fe728870c8182f8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/strum_macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/967573fc64a706430e19b4942fe728870c8182f8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn-1.0.109/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn-1.0.109/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn-2.0.95/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn-2.0.95/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/syn/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/sysinfo/LICENSE %{buildroot}/usr/share/package-licenses/scx/f83864fda2a313306dfb3de8b01a36830a057a46 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tap/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/cd9883e58015ea0ea30394b147d796bffd6ce809 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tar/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tar/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tempfile-3.16.0/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tempfile-3.16.0/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tempfile/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tempfile/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/term/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/term/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/84d2c544ebf5c18b313d1ebae8c2ac7cf1856f7d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/termcolor/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/termcolor/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/termcolor/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/terminal_size/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/terminal_size/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/e08d1736c80198e1adec92ff27482e7abbc42d86 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-1.0.69/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-1.0.69/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-impl-1.0.69/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-impl-1.0.69/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-impl/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror-impl/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thiserror/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thread_local/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/thread_local/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/threadpool/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/threadpool/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time-core/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/13f55d9b7b3a769d76eab5d4a096f7ff24a017be || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time-core/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ffffe83fef2bd6576c95e851bc81e1f6a641d638 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time-macros/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/75b9500512bb4d24722887e64a982c51e6bdcc4c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time-macros/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/03431277c040357c85596083ac918eb591ac04ac || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time/LICENSE-Apache %{buildroot}/usr/share/package-licenses/scx/75b9500512bb4d24722887e64a982c51e6bdcc4c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/time/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/03431277c040357c85596083ac918eb591ac04ac || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tiny-keccak/LICENSE %{buildroot}/usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tinytemplate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tinytemplate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5875ddc227c505ff2ad6e06538e1d72d403b9060 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tokio-macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/f4b578f96a550c1bc177029711f23d33edaceae2 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tokio-util/LICENSE %{buildroot}/usr/share/package-licenses/scx/76af2051c1ebfe06b88b7bcc497ce81ec4295752 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tokio/LICENSE %{buildroot}/usr/share/package-licenses/scx/76af2051c1ebfe06b88b7bcc497ce81ec4295752 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml_datetime/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml_datetime/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml_edit/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/669a1e53b9dd9df3474300d3d959bb85bad75945 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/toml_edit/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tracing-attributes/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tracing-core/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tracing-core/src/spin/LICENSE %{buildroot}/usr/share/package-licenses/scx/0956f8ac49e23a546fb113f711d7cdc0c3e98c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/tracing/LICENSE %{buildroot}/usr/share/package-licenses/scx/3c8e7847ca19c2bb00f4100c725810c04a1b56d6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/typenum/LICENSE %{buildroot}/usr/share/package-licenses/scx/481e4be7d70c11ee3f6e04a59a0e5afccc551db2 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/typenum/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/69facfd64b2a7aa4a22c917ef10cd96e41b75b87 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/typenum/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/5984f5244c7bc13bf15a5bea823c04ec0bbc714f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ucd-trie/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/ucd-trie/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/uds_windows/LICENSE %{buildroot}/usr/share/package-licenses/scx/03e1fe6fd0bc6d73c3cd3370d5f0a73c4fcb60d6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicase/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicase/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/576a5b2a10d97104f8fdc9dfecb7f7493edff30f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-ident-%{version}/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-ident-%{version}/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-ident/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-ident/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-segmentation/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-segmentation/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-segmentation/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-truncate/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-truncate/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-truncate/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/8c8867dbe260a6b77229621a8f55979f7d92ec95 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width-0.1.12/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width-0.1.12/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width-0.1.12/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-width/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-xid/COPYRIGHT %{buildroot}/usr/share/package-licenses/scx/5ed53061419caf64f84d064f3641392a2a10fa7f || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-xid/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/unicode-xid/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/60c3522081bf15d7ac1d4c5a63de425ef253e87a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/utf8parse/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/utf8parse/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/93074692b8a28bef1743c44a9e5b97b1401c0d09 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/vergen/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/vergen/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/version-compare/LICENSE %{buildroot}/usr/share/package-licenses/scx/bbca91a10afe6e9d066acdd53930d0c47eb08803 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/version_check/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/version_check/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/cfcb552ef0afbe7ccb4128891c0de00685988a4b || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/vsprintf/LICENSE %{buildroot}/usr/share/package-licenses/scx/3a82a09bd5548ac4dc252a273ca9cdc2fd52ea69 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/walkdir/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/walkdir/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/4c8990add9180fc59efa5b0d8faf643c9709501e || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/walkdir/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.11.0+wasi-snapshot-preview1/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.13.3+wasi-0.2.2/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.13.3+wasi-0.2.2/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi-0.13.3+wasi-0.2.2/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi/LICENSE-Apache-2.0_WITH_LLVM-exception %{buildroot}/usr/share/package-licenses/scx/f137043e018f2024e0414a9153ea728c203ae8e5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-backend-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-backend-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-backend/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-backend/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-support-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-support-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-support/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro-support/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-macro/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-shared-0.2.99/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-shared-0.2.99/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-shared/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen-shared/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wasm-bindgen/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/web-sys/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/web-sys/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/3b042d3d971924ec0296687efd50dbe08b734976 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/which/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/a8ced9a6c206a0e47fac6c6d0d0ce839e85b2eb7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/widestring/LICENSE %{buildroot}/usr/share/package-licenses/scx/b37ac973bb994b8f572a333b2617bddabca57d7d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/widestring/LICENSES/Apache-2.0.txt %{buildroot}/usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/widestring/LICENSES/MIT.txt %{buildroot}/usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winapi-util/COPYING %{buildroot}/usr/share/package-licenses/scx/dd445710e6e4caccc4f8a587a130eaeebe83f6f6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winapi-util/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2ad1215c12bd0a3492399dc438aa63084323c662 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winapi-util/UNLICENSE %{buildroot}/usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winapi/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/92170cdc034b2ff819323ff670d3b7266c8bffcd || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winapi/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/2243f7a86daaa727d34d92e987a741036f288464 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-core-0.52.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-core-0.52.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-core/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-core/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-implement/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-implement/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-interface/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-interface/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-result/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-result/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys-0.48.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys-0.48.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys-0.52.0/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys-0.52.0/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-sys/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-targets-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-targets-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-targets/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows-targets/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_gnullvm-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_gnullvm-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_aarch64_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnu-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnu-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnu/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnu/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_i686_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnu-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnu-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnu/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnu/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnullvm-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnullvm-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnullvm/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_gnullvm/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_msvc-0.48.5/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_msvc-0.48.5/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_msvc/license-apache-2.0 %{buildroot}/usr/share/package-licenses/scx/a3b3a65335e78bde163f84d599fa899776552994 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/windows_x86_64_msvc/license-mit %{buildroot}/usr/share/package-licenses/scx/689ec0681815ecc32bee639c68e7740add7bd301 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winnow-0.6.22/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c0955b5351b1dcafdd0b9bb2d7e84fe0e3d731ca || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/winnow/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/c0955b5351b1dcafdd0b9bb2d7e84fe0e3d731ca || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wrapcenum-derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/b6c39038a6c6399070199d86249c50a6774ca1c3 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wrapcenum-derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/082abb1078b3e148973a2d0ebda778a2c2e728ae || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/wyz/LICENSE.txt %{buildroot}/usr/share/package-licenses/scx/aae96e462805b4d3f3737992ffd66729313fcaa6 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/xattr/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/xattr/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/xdg-home/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/xdg/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/xdg/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/9f3c36d2b7d381d9cf382a00166f3fbd06783636 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/yaml-rust2/LICENSE %{buildroot}/usr/share/package-licenses/scx/83318fcbbc7308acfd2e5101513a142d100bff6d || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/yaml-rust2/tests/yaml-test-suite/License %{buildroot}/usr/share/package-licenses/scx/8dd5ea7754384f29ef4a688de3aa05429cb2af13 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zbus/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zbus_macros/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zbus_names/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy-derive/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ebbc0758a0322f1bfe28f5438867a084e53941c8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy-derive/LICENSE-BSD %{buildroot}/usr/share/package-licenses/scx/46aace8adc5b06990d9ee2b6bd555ea03c4df7a1 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy-derive/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/493b3ee6eb0b5b24708a0a07ab11ad2bc1b49c9c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/ebbc0758a0322f1bfe28f5438867a084e53941c8 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy/LICENSE-BSD %{buildroot}/usr/share/package-licenses/scx/46aace8adc5b06990d9ee2b6bd555ea03c4df7a1 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/493b3ee6eb0b5b24708a0a07ab11ad2bc1b49c9c || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy/src/third_party/rust/LICENSE-APACHE %{buildroot}/usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zerocopy/src/third_party/rust/LICENSE-MIT %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zvariant/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zvariant_derive/LICENSE %{buildroot}/usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04 || :
+cp %{_builddir}/scx-2025-07-08-22-49-03/zvariant_utils/LICENSE %{buildroot}/usr/share/package-licenses/scx/ce3a2603094e799f42ce99c40941544dfcc5c4a5 || :
 GOAMD64=v2
 DESTDIR=%{buildroot} ninja -C builddir install
 
@@ -988,6 +970,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/bin/scx_flatcg
 /usr/bin/scx_lavd
 /usr/bin/scx_layered
+/usr/bin/scx_lib_selftests
 /usr/bin/scx_loader
 /usr/bin/scx_nest
 /usr/bin/scx_p2dq
@@ -1013,6 +996,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 %files dev
 %defattr(-,root,root,-)
 /usr/include/scx/arena_userspace_interrop.bpf.h
+/usr/include/scx/bpf_arena_common.bpf.h
 /usr/include/scx/bpf_arena_common.h
 /usr/include/scx/bpf_arena_spin_lock.h
 /usr/include/scx/bpf_atomic.h
@@ -1029,7 +1013,9 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/include/scx/namespace_impl.bpf.h
 /usr/include/scx/ravg.bpf.h
 /usr/include/scx/ravg_impl.bpf.h
+/usr/include/scx/user_exit_info.bpf.h
 /usr/include/scx/user_exit_info.h
+/usr/include/scx/user_exit_info_common.h
 
 %files license
 %defattr(0644,root,root,0755)
@@ -1045,7 +1031,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/0956f8ac49e23a546fb113f711d7cdc0c3e98c85
 /usr/share/package-licenses/scx/0a1e89ac22450cb0311baa2613bc21b7131b321f
 /usr/share/package-licenses/scx/0a479266cd34fbbab4255fbd83e8df5a9a595929
-/usr/share/package-licenses/scx/0c160db99de1b5577d1160540f1a1312b01a3f5b
+/usr/share/package-licenses/scx/0bcad4f4ae6cf06d8f527e1455efefabcf6ab7bf
 /usr/share/package-licenses/scx/0ff30cb09f7056217d089f352fe089b49971eeae
 /usr/share/package-licenses/scx/108bb98fdf8f27765ea240d80481be8362175ca7
 /usr/share/package-licenses/scx/11f0f1bee61ba6393c3dc7aefee7b92b604ff6c0
@@ -1061,6 +1047,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/218fc8c15534e8840cbff5801582c450c97869ab
 /usr/share/package-licenses/scx/2243f7a86daaa727d34d92e987a741036f288464
 /usr/share/package-licenses/scx/233f44af3fb55dcc7fddfef8e77ac627b0008756
+/usr/share/package-licenses/scx/2404a12291507939fef255f5dc240868a3f409d3
 /usr/share/package-licenses/scx/2510927d07430a2092720e8f4a5287043f75e8d3
 /usr/share/package-licenses/scx/2646b6d2453275031022ab245a3a6d5da4ba80b2
 /usr/share/package-licenses/scx/27541df8e6d877c3912bbe4c48711f36e826cc5b
@@ -1076,7 +1063,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/3389b1fc45edfdd16c95926164ecf61e8369c9d8
 /usr/share/package-licenses/scx/33dbd2d99ad231460bbb01812a52c85e577bd9ba
 /usr/share/package-licenses/scx/34c5034377edef1080538bd0d4f5cf9b78e22dff
-/usr/share/package-licenses/scx/351032fe803193ce9cfd5d7a3d18eaf068b5cb6f
 /usr/share/package-licenses/scx/36d69bcb88153a640740000efe933b009420ce7e
 /usr/share/package-licenses/scx/382a836c42320ca24caa8dce42ea377814a052fd
 /usr/share/package-licenses/scx/388871ab0ab7f8ba6aaa0d444a5153f15c918cdb
@@ -1108,9 +1094,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/4cc77b90af91e615a64ae04893fdffa7939db84c
 /usr/share/package-licenses/scx/4dbe8833d0189c691b308c3dd40fab84ef2e9630
 /usr/share/package-licenses/scx/50121d8b8c9f6483fe17ea679f28f85fe59b2a5a
-/usr/share/package-licenses/scx/512f61f7fe734aa8f08ede10a9ccd51826d6ea06
 /usr/share/package-licenses/scx/51386ae5a11a72e05db629d63588c9f1cfda8d1e
-/usr/share/package-licenses/scx/553e82bef8637312393c95bc62e23e8f81fd9e47
 /usr/share/package-licenses/scx/5641ab41a62889b9a22161d95f174fc889dd9660
 /usr/share/package-licenses/scx/576a5b2a10d97104f8fdc9dfecb7f7493edff30f
 /usr/share/package-licenses/scx/5798832c31663cedc1618d18544d445da0295229
@@ -1136,7 +1120,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/6e5c4711bcae04967d7f5b5e01cf56ae03bebe7a
 /usr/share/package-licenses/scx/70693ba8757c4a17af68e39ab32e4e0d4a389416
 /usr/share/package-licenses/scx/709be9d07c00197f2e96593f4cd84f975c4e9f5f
-/usr/share/package-licenses/scx/739a40593cfdae7ce8d08836b16d0a0af314fff8
 /usr/share/package-licenses/scx/75b9500512bb4d24722887e64a982c51e6bdcc4c
 /usr/share/package-licenses/scx/766401307203c6c8f237eac359e97d6979b39c04
 /usr/share/package-licenses/scx/76af2051c1ebfe06b88b7bcc497ce81ec4295752
@@ -1149,7 +1132,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/8205a96107bd2d30b9a078adcc9eea1bf5eccaf7
 /usr/share/package-licenses/scx/82da472f6d00dc5f0a651f33ebb320aa9c7b08d0
 /usr/share/package-licenses/scx/83318fcbbc7308acfd2e5101513a142d100bff6d
-/usr/share/package-licenses/scx/839963b8e6356d7d297f5124373d62b4c88ac3a8
 /usr/share/package-licenses/scx/83f84f78511c0e3dc95622f9a0b6e151a9ae4ea5
 /usr/share/package-licenses/scx/84d2c544ebf5c18b313d1ebae8c2ac7cf1856f7d
 /usr/share/package-licenses/scx/8624bcdae55baeef00cd11d5dfcfa60f68710a02
@@ -1163,7 +1145,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/8e31d76c1073644a6e761836ac34a590fee47a83
 /usr/share/package-licenses/scx/8e73926030e5cf210703bbdbd4d5c2a3880b3f71
 /usr/share/package-licenses/scx/8f178d4cc55689ebdd562cabb1282e33bf8f32fe
-/usr/share/package-licenses/scx/8fcc05c0dd9d9c76e948120c9520e4cbe85fb527
 /usr/share/package-licenses/scx/8fe88f09d35c6054e0a780a793833c16fb888168
 /usr/share/package-licenses/scx/9153ebde55eff1debbeeba31eabde5404975b0d5
 /usr/share/package-licenses/scx/91abce61ea0c1c313bb5ba31f04196490960a479
@@ -1178,6 +1159,8 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/96f019e8abadc7a87b330a697504d874a1c06268
 /usr/share/package-licenses/scx/972723ef8f594b1c7515e4c227ff9d5912041fac
 /usr/share/package-licenses/scx/9744cedce099f727b327cd9913a1fdc58a7f5599
+/usr/share/package-licenses/scx/9882b0873015c1a691a7533caba8fa3a48917ca9
+/usr/share/package-licenses/scx/99594687f50890ce5047a78421a3be306672d10c
 /usr/share/package-licenses/scx/9a2b6b4ad55ec42cf19fc686c74668d3a6303ae7
 /usr/share/package-licenses/scx/9b76a43221967e5c55c4183406e1ebc7417da61d
 /usr/share/package-licenses/scx/9c6e81caeb170dd5501d39895df9efb657c3c86b
@@ -1196,12 +1179,12 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/aae96e462805b4d3f3737992ffd66729313fcaa6
 /usr/share/package-licenses/scx/ab8f497fedf7776763827d658fa68c45b8698039
 /usr/share/package-licenses/scx/ac0bf7546a377351144d930c5e31eff058fe4e8f
+/usr/share/package-licenses/scx/ac8e5b4cbc7123a14b1b914781864475ab820426
 /usr/share/package-licenses/scx/aca18f6eebf597377e59fff1f0e6adbadcdcf97b
 /usr/share/package-licenses/scx/adadb67a9875aeeac285309f1eab6e47d9ee08a7
 /usr/share/package-licenses/scx/b18f451b891c20c5648f7a3034908508f49f015b
 /usr/share/package-licenses/scx/b37ac973bb994b8f572a333b2617bddabca57d7d
 /usr/share/package-licenses/scx/b4872d72eb3ccfa74730cc229184eec04f303e7d
-/usr/share/package-licenses/scx/b4f88f24f74c2d775c9a1f77e1da40c67cc6acc0
 /usr/share/package-licenses/scx/b6c39038a6c6399070199d86249c50a6774ca1c3
 /usr/share/package-licenses/scx/b716916e6b0b96af5ecadf1eaee25f966f5d6cb2
 /usr/share/package-licenses/scx/b916da18877fcec3d37860fe60c1189c447e90b9
@@ -1209,7 +1192,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/bbca91a10afe6e9d066acdd53930d0c47eb08803
 /usr/share/package-licenses/scx/bce2ed71de8bb33db2d29a5fcadd7407824e9248
 /usr/share/package-licenses/scx/be561fe6eb626c2566b9a6c0885554b4ee4e6b74
-/usr/share/package-licenses/scx/c037f9fc48de42630cb62476823179cab2e9c8dd
 /usr/share/package-licenses/scx/c0955b5351b1dcafdd0b9bb2d7e84fe0e3d731ca
 /usr/share/package-licenses/scx/c145b1a607ecf06aed81f1d04a65c2e43dffdc63
 /usr/share/package-licenses/scx/c1f96d6a54446beefad79ef49b3c123c597b7a40
@@ -1246,7 +1228,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/e81567c196622efa36b46c5fd53cde741aaf0993
 /usr/share/package-licenses/scx/e9b475b5dccf14bd66d72dd12a04db75eaad1a9e
 /usr/share/package-licenses/scx/ea4215a6204b8414db6209c378a78a2dfb91c9ee
-/usr/share/package-licenses/scx/eaf6e84be577d04f65f4f63136ed8c616a8970fd
 /usr/share/package-licenses/scx/ebbc0758a0322f1bfe28f5438867a084e53941c8
 /usr/share/package-licenses/scx/ec9737a4e769cce48d5c95d9c75a4ba5f29a2563
 /usr/share/package-licenses/scx/ed19a80b922d4e5e50d5b1ed3f0f35c081872d14
@@ -1258,7 +1239,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/f45ee1c765646813b442ca58de72e20a64a7ddba
 /usr/share/package-licenses/scx/f498d95a48889a0b1432e420e6754881eff1d593
 /usr/share/package-licenses/scx/f4b578f96a550c1bc177029711f23d33edaceae2
-/usr/share/package-licenses/scx/f591e1908efe604899b6cdcf5716e96665852778
 /usr/share/package-licenses/scx/f5a7ee42dcefea5415e6af50baca4e0c338bd8fe
 /usr/share/package-licenses/scx/f5feee4154156527645a9b18ef29da23fc859ca9
 /usr/share/package-licenses/scx/f6bb5f42ed0a322738f21a7f294a9451a8db1926
@@ -1266,7 +1246,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/package-licenses/scx/f83864fda2a313306dfb3de8b01a36830a057a46
 /usr/share/package-licenses/scx/f911b0506e6ba6a56b4edac717b461799f380ef0
 /usr/share/package-licenses/scx/fd33e0d46674b32eb66a5f1134e8d8a2d2f684c9
-/usr/share/package-licenses/scx/fea05fa01bac661c706e9e134d9d80b2248bb065
 /usr/share/package-licenses/scx/ff007ce11f3ff7964f1a5b04202c4e95b5c82c85
 /usr/share/package-licenses/scx/ff432d95fdfee3587e45abd61685c2209d245901
 /usr/share/package-licenses/scx/ff44b187892fcf1cd15a3ca61b498041b28afecc
